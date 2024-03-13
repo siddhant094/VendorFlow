@@ -1,4 +1,4 @@
-const mongoose = requiure('mongoose');
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -8,12 +8,14 @@ const userSchema = new Schema({
         unique: true,
     },
     password: String,
-    vendors: [{ type: mongoose.type.ObjectId, required: true, ref: 'Invoice' }],
+    vendors: [
+        { type: mongoose.Types.ObjectId, required: true, ref: 'Invoice' },
+    ],
     history: [
         {
             timestamp: { type: Number, required: true },
             invoice: {
-                type: mongoose.type.ObjectId,
+                type: mongoose.Types.ObjectId,
                 required: true,
                 ref: 'Invoice',
             },

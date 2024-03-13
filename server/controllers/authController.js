@@ -1,6 +1,7 @@
-// const loginUser = async (req, res) => {
-//     res.send('Login Route is working.');
-// };
+// const URL = require('../models/url');
+const User = require('../models/user');
+// const User = require('../models/user');
+const mongoose = require('mongoose');
 
 const loginUser = async (req, res) => {
     try {
@@ -54,11 +55,14 @@ const registerUser = async (req, res) => {
             name,
             email,
             password: hashedPassword,
+            vendors: [],
+            history: [],
         });
         return res.json(user);
     } catch (error) {
         console.log(error);
     }
+    // res.send('HELLO');
 };
 
 module.exports = {
