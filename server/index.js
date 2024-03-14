@@ -4,7 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const authRoutes = require('./routes/authRoutes');
-// const invoiceRoutes = require('./routes/invoiceRoutes');
+const invoiceRoutes = require('./routes/invoiceRoutes');
 
 const PORT = 9000;
 const app = express();
@@ -35,13 +35,13 @@ app.get('/', (req, res) => {
 });
 
 app.use('/u', authRoutes);
-// app.use('/i', invoiceRoutes);
+app.use('/i', invoiceRoutes);
 
 app.listen(PORT, (error) => {
     if (!error)
         console.log(
             'Server is Successfully Running, and App is listening on Port: ' +
-                PORT
+            PORT
         );
     else console.log("Error occurred, server can't start", error);
 });

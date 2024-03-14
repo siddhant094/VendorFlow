@@ -19,6 +19,7 @@ const invoiceSchema = new Schema({
         required: true,
         ref: 'User',
     },
+    visitHistory: [{ timestamp: { type: Number } }],
     utrNumber: String,
 });
 

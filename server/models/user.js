@@ -8,7 +8,7 @@ const userSchema = new Schema({
         unique: true,
     },
     password: String,
-    vendors: [
+    invoices: [
         { type: mongoose.Types.ObjectId, required: true, ref: 'Invoice' },
     ],
     history: [

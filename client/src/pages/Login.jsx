@@ -2,10 +2,10 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useContext, useState, useEffect } from 'react';
-// import { UserContext } from '../../context/userContext';
+import { UserContext } from '../../context/userContext';
 
 const Login = () => {
-    // const { user, setUser } = useContext(UserContext);
+    const { userId, setUserId, userData, setUserData } = useContext(UserContext);
     const navigate = useNavigate();
 
     const loginUser = async (e) => {
@@ -21,7 +21,8 @@ const Login = () => {
             if (data.error) {
                 toast.error(data.error);
             } else {
-                // setUser(data);
+                setUserData(data);
+                setUserId(data._id);
                 // if (!user) {
                 //     console.log('INSIDE !user');
                 //     await axios.get('/profile').then(({ data }) => {
