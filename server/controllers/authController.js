@@ -1,7 +1,10 @@
 // const URL = require('../models/url');
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 // const User = require('../models/user');
 const mongoose = require('mongoose');
+const { hashPassword, comparePassword } = require('../helpers/auth');
+
 
 const loginUser = async (req, res) => {
     try {
@@ -38,18 +41,20 @@ const loginUser = async (req, res) => {
 const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
-
+        // console.log('1')
         if (!name || !email || !password) {
             return res.json({
                 error: 'name is required',
             });
         }
+        // console.log('2')
         const exists = await User.findOne({ email });
         if (exists) {
             return res.json({
                 error: 'Email is already registered, please Login',
             });
         }
+        // console.log('3')
         const hashedPassword = await hashPassword(password);
         const user = await User.create({
             name,
@@ -58,6 +63,7 @@ const registerUser = async (req, res) => {
             vendors: [],
             history: [],
         });
+        // console.log('4')
         return res.json(user);
     } catch (error) {
         console.log(error);

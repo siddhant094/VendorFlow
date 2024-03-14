@@ -5,7 +5,6 @@ const Navbar = () => {
     return (
         <div className='flex justify-between px-3 bg-slate-100'>
             <Link to='/' className='p-2 font-semibold text-xl'>
-                Link Lynx
             </Link>
             {/* {user && user.isLoggedIn ? ( */}
             <div className='flex justify-center items-center'>
