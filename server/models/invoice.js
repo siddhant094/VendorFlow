@@ -6,6 +6,10 @@ const invoiceSchema = new Schema({
         type: String,
         required: true,
     },
+    shortId: {
+        type: String,
+        required: true,
+    },
     status: {
         type: String,
         required: true,
@@ -19,8 +23,8 @@ const invoiceSchema = new Schema({
         required: true,
         ref: 'User',
     },
-    visitHistory: [{ timestamp: { type: Number } }],
-    utrNumber: String,
+    visitHistory: [{ timestamp: { type: Number }, code: String }],
+    utrNumber: Number,
 });
 
 const InvoiceModel = mongoose.model('Invoice', invoiceSchema);

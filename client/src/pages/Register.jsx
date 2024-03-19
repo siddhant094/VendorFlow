@@ -41,19 +41,23 @@ const Register = () => {
             <form
                 action=''
                 onSubmit={registerUser}
-                className='flex flex-col max-sm:w-10/12 md:w-1/3 gap-2 [&_input]:rounded [&_input]:border [&_input]:p-1'
+                className='flex flex-col md:w-1/3 gap-2'
             >
                 <label htmlFor=''>Name</label>
                 <input
                     type='text'
                     placeholder='Enter Name...'
+                    className='border-none bg-zinc-900 hover:bg-zinc-800 text-white px-3 py-3 rounded-md mb-2 mt-4 focus:outline-none'
                     onChange={(e) => setData({ ...data, name: e.target.value })}
+                    required
                     value={data.name}
                 />
                 <label htmlFor=''>Email</label>
                 <input
+                    required
                     type='email'
                     placeholder='Enter Email...'
+                    className='bg-zinc-900 hover:bg-zinc-800 text-white px-3 py-3 rounded-md mb-2 mt-4 grow focus:outline-none'
                     onChange={(e) =>
                         setData({ ...data, email: e.target.value })
                     }
@@ -61,8 +65,10 @@ const Register = () => {
                 />
                 <label htmlFor=''>Password</label>
                 <input
+                    required
                     type='password'
                     placeholder='Enter Password...'
+                    className='bg-zinc-900 hover:bg-zinc-800 text-white px-3 py-3 rounded-md mb-2 mt-4 grow focus:outline-none'
                     onChange={(e) =>
                         setData({ ...data, password: e.target.value })
                     }
@@ -70,7 +76,7 @@ const Register = () => {
                 />
                 <button
                     type='submit'
-                    className='bg-blue-400 text-white p-1 rounded-md mt-2'
+                    className='mt-2 flex items-center bg-white hover:bg-gray-300 text-black px-3 py-1.5 rounded-md cursor-pointer max-w-fit mb-4 md:mr-4 font-bold'
                 >
                     REGISTER
                 </button>
