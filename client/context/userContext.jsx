@@ -6,6 +6,9 @@ export const UserContext = createContext({});
 export function UserContextProvider({ children }) {
     const [userId, setUserId] = useState(null);
     const [userData, setUserData] = useState(null);
+    const [token, setToken] = useState(false);
+    const [timeoutDate, setTimeoutDate] = useState();
+    // const [userId, setUserId] = useState(false);
 
     // useEffect(() => {
     //     const test = async () => {
@@ -19,7 +22,18 @@ export function UserContextProvider({ children }) {
     // }, []);
 
     return (
-        <UserContext.Provider value={{ userId, setUserId, userData, setUserData }}>
+        <UserContext.Provider
+            value={{
+                userId,
+                setUserId,
+                userData,
+                setUserData,
+                token,
+                setToken,
+                timeoutDate,
+                setTimeoutDate,
+            }}
+        >
             {children}
         </UserContext.Provider>
     );

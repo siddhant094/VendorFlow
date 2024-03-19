@@ -1,41 +1,49 @@
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import { useContext, useState, useEffect } from 'react';
-import { UserContext } from '../../context/userContext';
+import { useContext, useState, useEffect, useCallback } from 'react';
+// import { UserContext } from '../../context/userContext';
+import { AuthContext } from '../../context/authContext';
 
 const Login = () => {
-    const { userId, setUserId, userData, setUserData } =
-        useContext(UserContext);
+    // const {
+    //     userId,
+    //     setUserId,
+    //     userData,
+    //     setUserData,
+    //     token,
+    //     setToken,
+    //     timeoutDate,
+    //     setTimeoutDate,
+    // } = useContext(UserContext);
+    const auth = useContext(AuthContext);
+
     const navigate = useNavigate();
 
     const loginUser = async (e) => {
         e.preventDefault();
         const { email, password } = data;
         try {
-            const { data } = await axios.post('http://localhost:9000/u/login', {
-                email,
-                password,
-            });
+            const { data } = await axios.post(
+                `${import.meta.env.VITE_API_URL}/u/login`,
+                {
+                    email,
+                    password,
+                }
+            );
             console.log(data);
 
             if (data.error) {
                 toast.error(data.error);
             } else {
-                setUserData(data);
-                setUserId(data._id);
-                // if (!user) {
-                //     console.log('INSIDE !user');
-                //     await axios.get('/profile').then(({ data }) => {
-                //         setUser(data);
-                //     });
-                // }
+                // setUserData(data);
+                // setUserId(data.userId);
+                auth.login(data.userId, data.token);
                 navigate('/dashboard');
             }
         } catch (error) {
             console.log(error);
         }
-        // axios.get('/');
     };
 
     const [data, setData] = useState({

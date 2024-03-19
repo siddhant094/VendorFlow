@@ -1,18 +1,19 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { UserContext } from '../../context/userContext';
+import { AuthContext } from '../../context/authContext';
 
 const TransactionHistory = () => {
-    const { userId, setUserId, userData, setUserData } =
-        useContext(UserContext);
+    const auth = useContext(AuthContext);
     const [invoices, setInvoices] = useState(null);
     let [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
             await axios
-                .get(`http://localhost:9000/i/invoices/${userId}`)
+                .get(
+                    `${import.meta.env.VITE_API_URL}/i/invoices/${auth.userId}`
+                )
                 .then((res) => {
                     // console.log('res.data: ' + res.data);
                     let filteredInvoices = res.data.filter(
@@ -47,6 +48,8 @@ const TransactionHistory = () => {
             <h1 className='text-3xl font-semibold mt-5'>
                 Transaction History{' '}
             </h1>
+            {invoices == null ||
+                (invoices.length == 0 && <div>No transaction history</div>)}
             <div className='flex flex-col gap-4 items-center justify-center w-full mt-3'>
                 {invoices &&
                     invoices.map((invoice, index) => {

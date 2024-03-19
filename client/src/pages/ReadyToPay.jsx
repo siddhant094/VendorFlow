@@ -1,29 +1,36 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { UserContext } from '../../context/userContext';
+// import { UserContext } from '../../context/userContext';
+import { AuthContext } from '../../context/authContext';
 
 const ReadyToPay = () => {
-    const { userId, setUserId, userData, setUserData } =
-        useContext(UserContext);
+    const auth = useContext(AuthContext);
     let [refresh, setRefresh] = useState(false);
     const [invoices, setInvoices] = useState(null);
+    let [dueAmount, setDueAmount] = useState('Calculating...');
 
     useEffect(() => {
         const getData = async () => {
             // console.log(userId);
             await axios
-                .get(`http://localhost:9000/i/invoices/${userId}`)
+                .get(
+                    `${import.meta.env.VITE_API_URL}/i/invoices/${auth.userId}`
+                )
                 .then((res) => {
                     let filteredInvoices = res.data.filter(
                         (item) => item.status != 'success'
                     );
-                    const newArr = filteredInvoices.map((v) => ({
-                        disabled: false,
-                        text: 'PAY',
-                        ...v,
-                    }));
-
+                    let count = 0;
+                    const newArr = filteredInvoices.map((v) => {
+                        count += v.amount;
+                        return {
+                            disabled: false,
+                            text: 'PAY',
+                            ...v,
+                        };
+                    });
+                    setDueAmount(count.toLocaleString('en-IN'));
                     setInvoices(newArr);
                     // console.log('NEW ARR: ' + JSON.stringify(newArr));
                 })
@@ -37,14 +44,14 @@ const ReadyToPay = () => {
     const handlePayInvoice = async (invoice, indexOfInvoiceToUpdate) => {
         try {
             // console.log('E: ' + JSON.stringify(invoice));
-            // toast('Processing Payment...');
+            toast('Processing Payment...');
             const data = {
                 vendor_name: invoice.name,
                 vendor_id: invoice._id,
                 amount: invoice.amount,
             };
             await axios
-                .post('http://localhost:9000/i/pay', data)
+                .post(`${import.meta.env.VITE_API_URL}/i/pay`, data)
                 .then((res) => {
                     // console.log('sent data: ' + JSON.stringify(data));
                     // console.log(res.data);
@@ -99,20 +106,41 @@ const ReadyToPay = () => {
             console.log(err);
         }
     };
+    console.log('Invoices ' + invoices);
 
     return (
         // <div>
-        <div className='flex flex-col justify-center items-center gap-3'>
+        <div className='flex flex-col justify-center items-center gap-3 pb-4'>
             <h1 className='text-3xl font-semibold mt-5'>
-                Ready to Pay Invoices are:{' '}
+                Ready to Pay Invoices{' '}
             </h1>
-            <div className='flex flex-col gap-4 items-center justify-center w-3/4 mt-3'>
+            {/* <div> */}
+            <div className='grid grid-flow-row grid-cols-2 gap-3 w-1/2 mt-4'>
+                <div className='p-4 rounded-xl bg-[#1c1c1c] w-full'>
+                    <span className='text-[#989999]'>Total Due Amount:</span>
+                    <br />
+                    <span className='text-xl font-medium'>₹ {dueAmount}</span>
+                </div>
+                <div className='p-4 rounded-xl bg-[#1c1c1c] w-full'>
+                    <span className='text-[#989999]'>
+                        Total Number of Invoices:
+                    </span>
+                    <br />
+                    <span className='text-xl font-medium'>
+                        {(invoices && invoices.length) || 0}
+                    </span>
+                </div>
+            </div>
+            {/* </div> */}
+            {invoices == null ||
+                (invoices.length == 0 && <div>No Pending Invoices to pay</div>)}
+            <div className='flex flex-col gap-4 items-center justify-center w-1/2 mt-3'>
                 {invoices &&
                     invoices.map((invoice, index) => {
                         // console.log(invoice);
                         return (
                             <div
-                                className='bg-[#1c1c1c] items-center w-3/4 px-3 py-2  rounded-md gap-2 font-medium grid grid-flow-row grid-cols-4'
+                                className='bg-[#1c1c1c] items-center px-3 py-2 w-full rounded-md gap-2 font-medium grid grid-flow-row grid-cols-4'
                                 key={index}
                             >
                                 <p>
